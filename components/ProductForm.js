@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router"
 import Loading from "./Loading";
+import { ReactSortable } from "react-sortablejs";
 
 export default function ProductForm({
     _id,
@@ -52,6 +53,10 @@ export default function ProductForm({
         }
     }
 
+    function updateImagesOrder(images){
+        setImages(images); 
+    }
+
     return (
         <form onSubmit={saveProduct}>
             <label htmlFor="">Product Name</label>
@@ -65,11 +70,17 @@ export default function ProductForm({
                 Photos
             </label>
             <div className="flex flex-wrap gap-1 mb-2">
+            <ReactSortable 
+                list={images} 
+                setList={updateImagesOrder}
+                className={'flex flex-wrap gap-1'}
+            >
             {!!images?.length && images.map(link => (
                 <div className="h-24 inline-block">
                     <img src={link} alt="" className="rounded-lg"/>
                 </div>
             ))}
+            </ReactSortable> 
             {isUploading && (
                 <div className="flex items-center h-24">
                     <Loading/>

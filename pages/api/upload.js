@@ -39,8 +39,6 @@ export default async function handle(req, res) {
         const link = `https://${BucketName}.s3.amazonaws.com/${newFileName}`;
         links.push(link);
     }
-
-    console.log(fields);
     return res.json({links});
 
 }
