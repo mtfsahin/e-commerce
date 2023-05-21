@@ -7,9 +7,9 @@ export default function ProductForm({
     _id,
     title: existingTitle,
     description: existingDescription,
-    price: existingPrice
+    price: existingPrice,
+    images
 }) {
-    console.log("existingTitle", existingTitle)
     const [title, setTitle] = useState(existingTitle || '');
     const [description, setDescription] = useState(existingDescription || '');
     const [price, setPrice] = useState(existingPrice || '');
@@ -33,6 +33,22 @@ export default function ProductForm({
         router.push('/products');
     }
 
+    async function uploadImages(ev) {
+        const files = ev.target?.files;
+        if (files?.length > 0) {
+            const data = new FormData;
+            for (const file of files){
+                data.append('file', file)
+            }
+
+            const res = await fetch('/api/upload',{
+                method:'POST',
+                body:data,
+            })
+            console.log("res:",res);
+        }
+    }
+
     return (
         <form onSubmit={saveProduct}>
             <label htmlFor="">Product Name</label>
@@ -40,7 +56,17 @@ export default function ProductForm({
                 type="text"
                 placeholder="product name"
                 value={title}
-                onChange={ev => setTitle(ev.target.value)} />
+                onChange={ev => setTitle(ev.target.value)} 
+            />
+            <label className="flex flex-col w-24 h-24 cursor-pointer text-center items-center justify-center text-sm gap-1 text-primary rounded-xl bg-white shadow-sm border border-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                <div>
+                    Add image
+                </div>
+                <input type="file" onChange={uploadImages} className="hidden" />
+            </label>
             <label htmlFor="">Description</label>
             <textarea
                 placeholder="description"
